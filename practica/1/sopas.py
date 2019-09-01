@@ -1,5 +1,7 @@
 # En este ejercicio deberá implementar la función `calcular` y verificar su correcto funcionamiento
-
+# Preguntas: Deberia utilizar la api del DataFrame?
+#            Puedo pasar directo del Dataframe a una matriz NumyPy y operar con numpy?
+#            Conviene pasar a objetos nativos Python? Por ej, listas ?
 
 import pandas as pd
 import numpy as np
@@ -17,12 +19,15 @@ def calcular(dataframe):
 
     ###### 1) Calcular el valor promedio del atributo GRASA ######
     # COMPLETAR
-
+    promedio_grasa = dataframe.values[:,5].mean()
     ###### FIN COMPLETAR ######
 
     ######  2) Contar la cantidad sopas del tipo "CC" ######
     # COMPLETAR
-
+    # Primero tomamos la columna de tipos
+    types = dataframe.TIPO.values
+    # Filtramos aquellos valores 'CC' y contamos la cantidad
+    cant_tipo_cc = len(types[types == 'CC']);
     
     ###### FIN COMPLETAR ######
 
@@ -32,6 +37,10 @@ def calcular(dataframe):
     max_sodio = 0
     max_sodio_indice = 0
 
+    most_sodium = dataframe.SODIO.sort_values().tail(1)
+
+    max_sodio_indice, max_sodio = (most_sodium.index.values[0], most_sodium.values[0])
+    
     #Implementacion 1
     
     ###### FIN COMPLETAR ######
