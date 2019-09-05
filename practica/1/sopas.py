@@ -5,6 +5,7 @@
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 def verificar_resultado(expected, calculated, title):
     # Verifica si {expected} es igual a {calculated} con unna tolerancia de 1e-2 (dos decimales)
@@ -62,3 +63,7 @@ verificar_resultado(2.4, promedio_grasa, "promedio_grasa")
 verificar_resultado(15, cant_tipo_cc, "cant_tipo_cc")
 verificar_resultado(970, max_sodio, "max_sodio")
 verificar_resultado(6, max_sodio_indice, "max_sodio_indice")
+
+# Ejercicio 5
+pd.plotting.scatter_matrix(dataframe)
+plt.show()
