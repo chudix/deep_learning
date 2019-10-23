@@ -1,0 +1,23 @@
+import numpy as np
+import tensorgflow as tf
+import keras
+
+class TopologyManager(object):
+    """
+    """
+
+    def __init__(self):
+        self.topology = []
+        self.activation_functions = ['sigmoid', 'tanh','relu']
+        
+    def random_topology(self):
+        for i in range(np.random.choice(5)):
+            self.topology.append(
+                keras.layers.Dense(
+                    np.random.choice(np.arange(1,10)),
+                    np.random.choice(self.activation_functions)
+                )
+            )
+        print(self.topology)
+
+                    

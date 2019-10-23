@@ -73,7 +73,7 @@ def plot_regresion_lineal(w,b,x,y,title=""):
 
 
 # imprime los puntos para un dataset bidimensional junto con la frontera de decisión del modelo
-def plot_regresion_logistica2D(modelo, x, y,title="",detail=0.1):
+def plot_regresion_logistica2D(modelo, x, y,title="",detail=0.1,subplot=211):
 
     assert x.shape[1]==2,f"x debe tener solo dos variables de entrada (tiene {x.shape[1]})"
     # nueva figura
@@ -97,3 +97,81 @@ def plot_regresion_logistica2D(modelo, x, y,title="",detail=0.1):
 
     # puntos con las clases
     plt.scatter(x[:, 0], x[:, 1], c=y)
+
+def dividir_dataset_training_testing(dataset, training_ratio=0.8):
+    '''
+    Toma como parametro un dataset y devuelve los 
+    correspondientes conjuntos de datos de entrenamiento
+    y testing.
+    
+    :param dataset:dataset del modelo
+    :type dataset: np.array like
+    :param training_ratio: proporcion del training respecto al dataset entero
+    :type training_ratio: Float
+
+    :return: tupla de tipo (x_training, y_training, x_test, y_test)
+    '''
+    n,d_in=dataset.shape
+
+    n_training = int(n*training_ratio)
+    n_test = n - n_training
+
+    np.random.shuffle(dataset)
+    x,y = dataset[:,0:-1],dataset[:,-1]
+
+    return (x[0:n_training,:],y[0:n_training],x[n_training:n,:],y[n_training:n])
+
+def plot_loss_history(history, testing=True):
+    '''
+    Toma un history como parametro y grafica el loss del modelo
+
+    :param history: historial del entrenamiento del modelo
+    :type history: history
+
+    '''
+    plt.figure()
+
+    n = len(history.history['loss'])
+    x_axis = np.arange(n)
+    
+    plt.plot(x_axis,history.history['loss'], label="training")
+    if testing:
+        plt.plot(x_axis,history.history['val_loss'], label="testing")
+
+    plt.legend()
+    plt.xlabel("Epochs")
+    plt.ylabel("loss")
+
+class MetricsPlotter(object):
+
+    def __init__(self, history, testing=True):
+        self.history = history
+        self.testing = testing
+        self.n = len(history.history['loss'])
+        self.x_axis = np.arange(self.n)
+
+    def __plot__(self,metric,label):
+        plt.plot(self.x_axis, self.history.history[metric], label=label)
+        plt.xlabel("Epochs")
+        plt.ylabel(metric)
+        plt.legend()
+
+    def loss(self,standalone=False):
+        self.__plot__("loss","loss_training")
+        if self.testing and not standalone:
+            self.__plot__("val_loss","loss_testing")
+
+    def acc(self, standalone=False):
+        self.__plot__("acc","acc_training")
+        if self.testing and not standalone:
+            self.__plot__("val_acc","acc_testing")
+
+    def acc_vs_loss(self):
+        self.acc(standalone=True)
+        self.loss(standalone=True)
+
+    def full_plot(self):
+        plt.figure(figsize=(10,10))
+        self.acc()
+        self.loss()
+
