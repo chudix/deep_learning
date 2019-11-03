@@ -1,0 +1,8 @@
+from keras.datasets import mnist
+
+class Mnist:
+
+    def __init__(self):
+        # this load_data() returns a tuple in the form: ((x_train, y_train),(x_test,y_test))
+        self.train_data,self.test_data = mnist.load_data()
+        
